@@ -16,6 +16,12 @@ export const Home = () => {
         body: ""
     }]);
 
+    const [editingPost, seteditingPost] = React.useState({
+        id: "",
+        title: "",
+        body: ""
+    })
+
     React.useEffect(() => {
         fetch("http://localhost:9000/api/")
         .then((res) => res.json())
@@ -24,7 +30,7 @@ export const Home = () => {
     }, []);
 
     const editPost = (post: TPost) => {
-        console.log(post);
+        seteditingPost(post);
     };
 
     const deletePost = (id: string) => {
@@ -35,6 +41,7 @@ export const Home = () => {
             const postsUpdated = posts.filter((post) => post.id !== id);
             setPosts(postsUpdated);
         })
+        .catch((err) => console.error(err));
     };
 
     const addPost = (post: TPost) => {
@@ -46,7 +53,10 @@ export const Home = () => {
         <React.Fragment>
             <h1 className="banner">Home</h1>
             <section>
-                <PostForm addPost={addPost} />
+                <PostForm 
+                    addPost={addPost} 
+                    editingPost={editingPost} 
+                />
             </section>
             <main className="row">
                 {posts.map((post) => (
